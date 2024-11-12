@@ -119,5 +119,55 @@ class Program
                 Console.WriteLine($"- {recept.Naziv}");
             }
         }
+
+        // Interaktivno pretraživanje recepata po imenu
+        Console.WriteLine("Unesite naziv recepta za pretragu (ili pritisnite Enter da preskočite):");
+        string nazivRecepta = Console.ReadLine();
+
+        if (!string.IsNullOrWhiteSpace(nazivRecepta))
+        {
+            var pronadjeniReceptiPoImenu = knjigaRecepata.PretraziPoImenu(nazivRecepta);
+            Console.WriteLine($"\nRecepti koji sadrže '{nazivRecepta}' u nazivu:");
+            foreach (var recept in pronadjeniReceptiPoImenu)
+            {
+                Console.WriteLine($"- {recept.Naziv}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Nijedan naziv nije unesen za pretragu po imenu.");
+        }
+
+        // Interaktivno pretraživanje recepata po sastojcima sa uslovom da ima barem 50% odgovarajućih sastojaka
+        Console.WriteLine("\nUnesite nazive sastojaka za pretragu, odvojene zarezom (npr. 'Brašno, Jaje'):");
+        string sastojciInput = Console.ReadLine();
+
+        if (!string.IsNullOrWhiteSpace(sastojciInput))
+        {
+            var naziviSastojaka = sastojciInput.Split(',').Select(s => s.Trim()).ToList();
+            var trazeniSastojci = sastojci
+                .Where(s => naziviSastojaka.Contains(s.ImeSastojka))
+                .ToList();
+
+            if (trazeniSastojci.Any())
+            {
+                var pronadjeniReceptiPoSastojcima = knjigaRecepata.FiltrirajPoSastojcima(trazeniSastojci);
+                Console.WriteLine("\nRecepti koji sadrže barem 50% unesenih sastojaka:");
+                foreach (var recept in pronadjeniReceptiPoSastojcima)
+                {
+                    Console.WriteLine($"- {recept.Naziv}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nijedan uneseni sastojak nije pronađen u listi sastojaka.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Nijedan sastojak nije unesen za pretragu po sastojcima.");
+        }
+
+
     }
 }

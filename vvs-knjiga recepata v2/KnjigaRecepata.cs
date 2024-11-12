@@ -35,7 +35,28 @@ namespace vvs_knjiga_recepata_v2
 
             return filtriraniRecepti;
         }
+
+        // Metoda za pretragu po imenu
+        public List<Recept> PretraziPoImenu(string naziv)
+        {
+            return recepti.Where(recept => recept.Naziv.Contains(naziv, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        // Metoda za pretragu po sastojcima
+        public List<Recept> PretraziPoSastojcima(List<Sastojak> trazeniSastojci)
+        {
+            return recepti.Where(recept =>
+                trazeniSastojci.All(trazeni =>
+                    recept.Sastojci.Any(rs => rs.Sastojak.ImeSastojka == trazeni.ImeSastojka)
+                )
+            ).ToList();
+        }
+
     }
+
+
+
+
 
 
 
