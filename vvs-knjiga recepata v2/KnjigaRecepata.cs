@@ -12,5 +12,32 @@ namespace vvs_knjiga_recepata_v2
         public void DodajRecept(Recept recept) => recepti.Add(recept);
         public void IzbrisiRecept(Recept recept) => recepti.Remove(recept);
         /*sortiraj, pretrazi po imenu, filtrirajposastojcima*/
+
+        public List<Recept> FiltrirajPoSastojcima(List<Sastojak> korisnickiSastojci)
+        {
+            List<Recept> filtriraniRecepti = new List<Recept>();
+
+            foreach (var recept in recepti)
+            {
+               
+                int brojOdgovarajucihSastojaka = recept.Sastojci.Count(ks =>
+                    korisnickiSastojci.Any(korisnickiSastojak => korisnickiSastojak.ImeSastojka == ks.Sastojak.ImeSastojka));
+
+                
+                double procenatOdgovarajucih = (double)brojOdgovarajucihSastojaka / korisnickiSastojci.Count * 100;
+
+               
+                if (procenatOdgovarajucih >= 50)
+                {
+                    filtriraniRecepti.Add(recept);
+                }
+            }
+
+            return filtriraniRecepti;
+        }
     }
+
+
+
 }
+
