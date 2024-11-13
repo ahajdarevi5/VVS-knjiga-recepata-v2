@@ -4,111 +4,124 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Definisanje 10 sastojaka
-        var sastojci = new List<Sastojak>
-        {
-            new Sastojak { ImeSastojka = "Šećer", MjernaJedinica = MjernaJedinica.Kilogram },
-            new Sastojak { ImeSastojka = "Brašno", MjernaJedinica = MjernaJedinica.Kilogram },
-            new Sastojak { ImeSastojka = "Jaje", MjernaJedinica = MjernaJedinica.Komad },
-            new Sastojak { ImeSastojka = "Mlijeko", MjernaJedinica = MjernaJedinica.Litar },
-            new Sastojak { ImeSastojka = "Puter", MjernaJedinica = MjernaJedinica.Kilogram },
-            new Sastojak { ImeSastojka = "Sol", MjernaJedinica = MjernaJedinica.Kilogram },
-            new Sastojak { ImeSastojka = "Prašak za pecivo", MjernaJedinica = MjernaJedinica.Kilogram },
-            new Sastojak { ImeSastojka = "Voda", MjernaJedinica = MjernaJedinica.Litar },
-            new Sastojak { ImeSastojka = "Sirće", MjernaJedinica = MjernaJedinica.Litar },
-            new Sastojak { ImeSastojka = "Ulje", MjernaJedinica = MjernaJedinica.Litar },
-            new Sastojak { ImeSastojka = "Vanilin secer", MjernaJedinica = MjernaJedinica.Litar }
-        };
 
-        // Kreiranje pojedinacnih recepata
-        var recepti = new List<Recept>
+        // Kreiranje instance knjige recepata
+        KnjigaRecepata knjigaRecepata = KnjigaRecepata.Instance;
+
+
+
+        Console.WriteLine("Dobrodošli! Šta želite danas kuhati?");
+        Console.WriteLine("Odaberite opciju:");
+        Console.WriteLine("1. Pogledajte sve recepte");
+        Console.WriteLine("2. Pretražite recept po nazivu");
+        Console.WriteLine("3. Pretražite recepte na osnovu kategorije (slatko/slano)");
+        Console.WriteLine("4. Izaberite sastojke na osnovu kojih ćemo Vam predložiti jela");
+
+        //ovo u petlju staviti 
+        int opcija;
+        if (int.TryParse(Console.ReadLine(), out opcija))
         {
-            new Recept
+            switch (opcija)
             {
-                Naziv = "Palačinke",
-                Sastojci = new List<KolSastojaka>
-                {
-                    new KolSastojaka { Sastojak = sastojci[1], Kolicina = 200 },
-                    new KolSastojaka { Sastojak = sastojci[2], Kolicina = 2 },
-                    new KolSastojaka { Sastojak = sastojci[3], Kolicina = 0.5 },
-                    new KolSastojaka { Sastojak = sastojci[4], Kolicina = 100 },
-                    new KolSastojaka { Sastojak = sastojci[5], Kolicina = 5 }
-                }
-            },
-            new Recept
-            {
-                Naziv = "Kolač",
-                Sastojci = new List<KolSastojaka>
-                {
-                    new KolSastojaka { Sastojak = sastojci[0], Kolicina = 100 },
-                    new KolSastojaka { Sastojak = sastojci[1], Kolicina = 300 },
-                    new KolSastojaka { Sastojak = sastojci[2], Kolicina = 3 },
-                    new KolSastojaka { Sastojak = sastojci[4], Kolicina = 150 },
-                    new KolSastojaka { Sastojak = sastojci[6], Kolicina = 10 }
-                }
-            },
-            new Recept
-            {
-                Naziv = "Omlet",
-                Sastojci = new List<KolSastojaka>
-                {
-                    new KolSastojaka { Sastojak = sastojci[2], Kolicina = 2 },
-                    new KolSastojaka { Sastojak = sastojci[4], Kolicina = 50 },
-                    new KolSastojaka { Sastojak = sastojci[5], Kolicina = 3 },
-                    new KolSastojaka { Sastojak = sastojci[9], Kolicina = 10 },
-                    new KolSastojaka { Sastojak = sastojci[7], Kolicina = 0.1 }
-                }
-            },
-            new Recept
-            {
-                Naziv = "Tjestenina",
-                Sastojci = new List<KolSastojaka>
-                {
-                    new KolSastojaka { Sastojak = sastojci[1], Kolicina = 200 },
-                    new KolSastojaka { Sastojak = sastojci[7], Kolicina = 0.5 },
-                    new KolSastojaka { Sastojak = sastojci[8], Kolicina = 5 },
-                    new KolSastojaka { Sastojak = sastojci[9], Kolicina = 20 },
-                    new KolSastojaka { Sastojak = sastojci[5], Kolicina = 5 }
-                }
-            },
-            new Recept
-            {
-                Naziv = "Salata",
-                Sastojci = new List<KolSastojaka>
-                {
-                    new KolSastojaka { Sastojak = sastojci[3], Kolicina = 0.2 },
-                    new KolSastojaka { Sastojak = sastojci[4], Kolicina = 20 },
-                    new KolSastojaka { Sastojak = sastojci[5], Kolicina = 2 },
-                    new KolSastojaka { Sastojak = sastojci[8], Kolicina = 10 },
-                    new KolSastojaka { Sastojak = sastojci[9], Kolicina = 15 }
-                }
+                case 1:
+                    // Prikaz svih recepata
+                    List<Recept> sviRecepti = knjigaRecepata.DohvatiSveRecepte();
+                    Console.WriteLine("Svi recepti:");
+                    foreach (var recept in sviRecepti)
+                    {
+                        knjigaRecepata.ipisiRecept(recept);
+                    }
+                    break;
+
+                case 2:
+                    // Pretraga po nazivu
+                    Console.WriteLine("Unesite naziv recepta:");
+                    string naziv = Console.ReadLine();
+                    var pronadjeniRecepti = knjigaRecepata.PretraziPoNazivu(naziv);
+                    Console.WriteLine($"Pronađeno recepata: {pronadjeniRecepti.Count}");
+                    foreach (var recept in pronadjeniRecepti)
+                    {
+                        knjigaRecepata.ipisiRecept(recept);
+                    }
+                    break;
+
+                case 3:
+                    // Pretraga po kategoriji
+                    Console.WriteLine("Izaberite kategoriju: \n1. Slatko\n2. Slano");
+                    string izborKategorije = Console.ReadLine();
+
+                    string kategorija = string.Empty;
+                    if (izborKategorije == "1")
+                    {
+                        kategorija = "slatko";
+                    }
+                    else if (izborKategorije == "2")
+                    {
+                        kategorija = "slano";
+                    }
+                    
+
+                    Console.WriteLine("Izaberite sekundarni kriterijum za sortiranje: \n1. Vreme pripreme\n2. Kalorije\n3. Broj sastojaka");
+                    string izborKriterijuma = Console.ReadLine();
+
+                    string sekundarniKriterijum = null;
+                    if (izborKriterijuma == "1")
+                    {
+                        sekundarniKriterijum = "vrijeme";
+                    }
+                    else if (izborKriterijuma == "2")
+                    {
+                        sekundarniKriterijum = "kalorije";
+                    }
+                    else if (izborKriterijuma == "3")
+                    {
+                        sekundarniKriterijum = "sastojci";
+                    }
+                    
+                    List<Recept> filtriraniRecepti = knjigaRecepata.SortirajRecepte(kategorija, sekundarniKriterijum);
+                    Console.WriteLine($"Pronađeno recepata: {filtriraniRecepti.Count}");
+                    foreach (var recept in filtriraniRecepti)
+                    {
+                        knjigaRecepata.ipisiRecept(recept);
+                    }
+                    break;
+
+                case 4:
+                    // Filtriranje na osnovu sastojaka
+                    Console.WriteLine("Unesite sastojke (odvojene zarezom):");
+                    string sastojciInput = Console.ReadLine();
+                    var sastojci = sastojciInput.Split(',');
+                    var korisnickiSastojci = new List<Sastojak>();
+                    foreach (var sastojakIme in sastojci)
+                    {
+                        korisnickiSastojci.Add(new Sastojak { ImeSastojka = sastojakIme.Trim() });
+                    }
+
+                    var predlozeniRecepti = knjigaRecepata.FiltrirajPoSastojcima(korisnickiSastojci);
+                    Console.WriteLine($"Pronađeno recepata: {predlozeniRecepti.Count}");
+                    foreach (var recept in predlozeniRecepti)
+                    {
+                        knjigaRecepata.ipisiRecept(recept);
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine("Nepoznata opcija. Pokušajte ponovo.");
+                    break;
             }
-        };
-
-        // Kreiranje knjige recepata i dodavanje recepata
-        KnjigaRecepata knjigaRecepata = new KnjigaRecepata();
-        foreach (var recept in recepti)
-        {
-            knjigaRecepata.DodajRecept(recept);
         }
+        
 
-        // ispis recepata
-        Console.WriteLine("Recepti i sastojci:");
-        foreach (var recept in recepti)
-        {
-            Console.WriteLine($"{recept.Naziv} (sastojci: {string.Join(", ", recept.Sastojci.Select(s => $"{s.Sastojak.ImeSastojka} - {s.Kolicina} {s.Sastojak.MjernaJedinica}"))})");
-        }
 
-        // testovi  (različit broj sastojaka)
-        var korisnickiZahtjevi = new List<List<Sastojak>>
-        {
-            new List<Sastojak> { sastojci[10] }, 
-            new List<Sastojak> { sastojci[1], sastojci[2], sastojci[3] }, 
-            new List<Sastojak> { sastojci[4], sastojci[5], sastojci[6], sastojci[7] }, 
-            new List<Sastojak> { sastojci[0], sastojci[1], sastojci[2], sastojci[4], sastojci[5] }, 
-            new List<Sastojak> { sastojci[1], sastojci[3], sastojci[4], sastojci[6], sastojci[8], sastojci[9] }
-        };
 
+
+
+
+
+
+
+
+        /*
         //  filtriranja recepata po zahtjevima
         foreach (var korisnickiZahtjev in korisnickiZahtjevi)
         {
@@ -167,7 +180,7 @@ class Program
         {
             Console.WriteLine("Nijedan sastojak nije unesen za pretragu po sastojcima.");
         }
-
+        */
 
     }
 }

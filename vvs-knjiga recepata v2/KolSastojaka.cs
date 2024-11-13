@@ -10,7 +10,5 @@ namespace vvs_knjiga_recepata_v2
     {
         public Sastojak Sastojak { get; set; }
         public double Kolicina { get; set; }
-
-        public double IzracunajKolicinu(int brojOsoba) => Kolicina * brojOsoba;
     }
 }
